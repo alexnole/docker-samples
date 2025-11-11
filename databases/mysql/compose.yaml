@@ -1,0 +1,53 @@
+# =================================================================================
+#                              MySQL Docker Compose
+#
+# This configuration launches a MySQL database container with Docker Compose.
+# It is intended for development and testing environments only.
+# For production use, review and adjust security, storage, and networking settings.
+#
+# Usage:
+#   1. Set required environment variables.
+#   2. Start with: docker compose up -d
+#   3. Connect to MySQL on the configured port (default: 3306)
+# =================================================================================
+
+# Project name
+name: databases
+
+# Docker services
+services:
+  mysql:
+    # https://hub.docker.com/_/mysql
+    image: mysql:${IMAGE_TAG:-latest}
+    container_name: ${CONTAINER_NAME:-mysql}
+    restart: ${RESTART_POLICY:-always}
+    platform: linux/x86_64
+
+    environment:
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_ROOT_HOST: ${MYSQL_ROOT_HOST:-%}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-local}
+      MYSQL_ALLOW_EMPTY_PASSWORD: ${MYSQL_ALLOW_EMPTY_PASSWORD:-yes}
+
+    ports:
+      - ${PORT:-3306}:3306
+
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+    networks:
+      - local
+
+# Docker volumes
+volumes:
+  mysql_data:
+    name: ${VOLUME_DATA_NAME:-mysql_data}
+    driver: local
+
+# Docker networks
+networks:
+  local:
+    name: ${NETWORK_NAME:-local_dbs_network}
+    driver: bridge

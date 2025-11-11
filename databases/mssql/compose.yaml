@@ -1,0 +1,49 @@
+# ==========================================================================================
+#                           Microsoft SQL Server Docker Compose
+#
+# This configuration launches a Microsoft SQL Server database container with Docker Compose.
+# It is intended for development and testing environments only.
+# For production use, review and adjust security, storage, and networking settings.
+#
+# Usage:
+#   1. Set required environment variables.
+#   2. Start with: docker compose up -d
+#   3. Connect to Microsoft SQL Server on the configured port (default: 1433)
+# ==========================================================================================
+
+# Project name
+name: databases
+
+# Docker services
+services:
+  mssql:
+    # https://hub.docker.com/r/microsoft/mssql-server
+    image: mcr.microsoft.com/mssql/server:${IMAGE_TAG:-latest}
+    container_name: ${CONTAINER_NAME:-mssql}
+    restart: ${RESTART_POLICY:-always}
+
+    environment:
+      MSSQL_SA_PASSWORD: ${MSSQL_SA_PASSWORD}
+      MSSQL_PID: ${MSSQL_PID:-Developer}
+      ACCEPT_EULA: ${ACCEPT_EULA:-Y}
+
+    ports:
+      - ${PORT:-1433}:1433
+
+    volumes:
+      - mssql_data:/var/opt/mssql
+
+    networks:
+      - local
+
+# Docker volumes
+volumes:
+  mssql_data:
+    name: ${VOLUME_DATA_NAME:-mssql_data}
+    driver: local
+
+# Docker networks
+networks:
+  local:
+    name: ${NETWORK_NAME:-local_dbs_network}
+    driver: bridge

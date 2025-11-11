@@ -1,0 +1,53 @@
+# =================================================================================
+#                           MongoDB Docker Compose
+#
+# This configuration launches a MongoDB database container with Docker Compose.
+# It is intended for development and testing environments only.
+# For production use, review and adjust security, storage, and networking settings.
+#
+# Usage:
+#   1. Set required environment variables.
+#   2. Start with: docker compose up -d
+#   3. Connect to MongoDB on the configured port (default: 27017)
+# =================================================================================
+
+# Project name
+name: databases
+
+# Docker services
+services:
+  mongodb:
+    # https://hub.docker.com/_/mongo
+    image: mongo:${IMAGE_TAG:-latest}
+    container_name: ${CONTAINER_NAME:-mongodb}
+    restart: ${RESTART_POLICY:-always}
+
+    environment:
+      MONGO_INITDB_DATABASE: "${MONGO_INITDB_DATABASE:-local}"
+      MONGO_INITDB_ROOT_USERNAME: "${MONGO_INITDB_ROOT_USERNAME}"
+      MONGO_INITDB_ROOT_PASSWORD: "${MONGO_INITDB_ROOT_PASSWORD}"
+
+    ports:
+      - ${PORT:-27017}:27017
+
+    volumes:
+      - mongodb_config:/data/configdb
+      - mongodb_data:/data/db
+
+    networks:
+      - local
+
+# Docker volumes
+volumes:
+  mongodb_data:
+    name: ${VOLUME_DATA_NAME:-mongodb_data}
+    driver: local
+  mongodb_config:
+    name: ${VOLUME_CONFIG_NAME:-mongodb_config}
+    driver: local
+
+# Docker networks
+networks:
+  local:
+    name: ${NETWORK_NAME:-local_dbs_network}
+    driver: bridge
