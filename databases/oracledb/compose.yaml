@@ -1,0 +1,49 @@
+# =================================================================================
+#                         Oracle Database Docker Compose
+#
+# This configuration launches an Oracle Database container with Docker Compose.
+# It is intended for development and testing environments only.
+# For production use, review and adjust security, storage, and networking settings.
+#
+# Usage:
+#   1. Set required environment variables.
+#   2. Start with: docker compose up -d
+#   3. Connect to Oracle Database on the configured port (default: 1521)
+# =================================================================================
+
+# Project name
+name: databases
+
+# Docker services
+services:
+  oracledb:
+    # https://container-registry.oracle.com/ords/ocr/ba/database/free
+    image: container-registry.oracle.com/database/free:${IMAGE_TAG:-latest}
+    container_name: ${CONTAINER_NAME:-oracledb}
+    restart: ${RESTART_POLICY:-always}
+
+    environment:
+      ORACLE_PWD: ${ORACLE_PWD}
+      ORACLE_PDB: ${ORACLE_PDB:-FREEPDB1}
+      ORACLE_CHARACTERSET: ${ORACLE_CHARACTERSET:-AL32UTF8}
+
+    ports:
+      - ${PORT:-1521}:1521
+
+    volumes:
+      - oracledb_data:/opt/oracle/oradata
+
+    networks:
+      - local
+
+# Docker volumes
+volumes:
+  oracledb_data:
+    name: ${VOLUME_DATA_NAME:-oracledb_data}
+    driver: local
+
+# Docker networks
+networks:
+  local:
+    name: ${NETWORK_NAME:-local_dbs_network}
+    driver: bridge
