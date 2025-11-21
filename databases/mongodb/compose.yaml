@@ -49,5 +49,5 @@ volumes:
 # Docker networks
 networks:
   local:
-    name: ${NETWORK_NAME:-local_dbs_network}
+    name: ${NETWORK_NAME:-databases_local}
     driver: bridge
