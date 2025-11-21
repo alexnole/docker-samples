@@ -1,0 +1,44 @@
+# =================================================================================
+#                         Keycloak Docker Compose
+#
+# This configuration launches a Keycloak container with Docker Compose.
+# It is intended for development and testing environments only.
+# For production use, review and adjust security, storage, and networking settings.
+#
+# Usage:
+#   1. Set required environment variables.
+#   2. Start with: docker compose up -d
+#   3. Connect to Keycloak on the configured port (default: 8080)
+# =================================================================================
+
+# Project name
+name: services
+
+# Docker services
+services:
+  keycloak:
+    # https://www.keycloak.org/getting-started/getting-started-docker
+    image: quay.io/keycloak/keycloak:${IMAGE_TAG:-latest}
+    container_name: ${CONTAINER_NAME:-keycloak}
+    restart: ${RESTART_POLICY:-always}
+    command: start-dev
+
+    environment:
+      KC_DB: ${KC_DB:-postgres}
+      KC_DB_URL: ${KC_DB_URL}
+      KC_DB_USERNAME: ${KC_DB_USERNAME}
+      KC_DB_PASSWORD: ${KC_DB_PASSWORD}
+      KC_BOOTSTRAP_ADMIN_USERNAME: ${KC_BOOTSTRAP_ADMIN_USERNAME}
+      KC_BOOTSTRAP_ADMIN_PASSWORD: ${KC_BOOTSTRAP_ADMIN_PASSWORD}
+
+    ports:
+      - ${PORT:-8080}:8080
+
+    networks:
+      - local
+
+# Docker networks
+networks:
+  local:
+    name: ${NETWORK_NAME:-keycloak_local}
+    driver: bridge
