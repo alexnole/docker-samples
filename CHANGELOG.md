@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.2.0](https://github.com/alexnole/docker-samples/compare/v1.1.0...v1.2.0) (2025-11-21)
+
+### Features
+
+- Add compose setup for keycloak ([b0730a4](https://github.com/alexnole/docker-samples/commit/b0730a4939d4e522377f883351fa522599282186))
+
+### Fixes
+
+- **databases:** correct comment format to avoid docker parsing errors ([185c782](https://github.com/alexnole/docker-samples/commit/185c7821dd2c0b9db04c36fdaff8ff5a909c8e31))
+
+### Refactors
+
+- **databases:** update default network name ([2f57752](https://github.com/alexnole/docker-samples/commit/2f57752d64eebc449840c929efada3e912dc19ea))
+
 ## [1.1.0](https://github.com/alexnole/docker-samples/compare/v1.0.0...v1.1.0) (2025-11-12)
 
 ### Features
